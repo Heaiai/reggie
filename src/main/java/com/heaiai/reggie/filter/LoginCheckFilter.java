@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @description
+ * @description 登录拦截器
  * @author: Heaiai
  * @create: 2023-02-19 22:04:17
  */
