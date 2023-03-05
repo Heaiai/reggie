@@ -1,9 +1,14 @@
 package com.heaiai.reggie.config;
 
+import com.heaiai.reggie.common.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+import java.util.List;
 
 /**
  * @description mvc静态资源访问配置类
@@ -26,4 +31,20 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/front/**").addResourceLocations("classpath:/front/");
     }
 
+    /***
+     * @Description: 扩展mvc框架的消息转换区IAEA
+     * @Author:Heaiai
+     * @Create:2023/3/5 22:17
+     */
+   @Override
+   protected void extendMessageConverters(List<HttpMessageConverter<?>> converters){
+       log.info("扩展消息转换器...");
+       //创建消息转换器对象
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+        //设置对象转换器，底层使用jackson将java对象转为json
+        messageConverter.setObjectMapper(new JacksonObjectMapper());
+        //将上面的消息转换器对象追加到Mvc框架的转换器集合中
+       //放的下标越靠前越会被优先使用到
+        converters.add(0,messageConverter);
+   }
 }

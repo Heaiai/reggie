@@ -1,6 +1,7 @@
 package com.heaiai.reggie.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.heaiai.reggie.common.R;
 import com.heaiai.reggie.entity.Employee;
 import com.heaiai.reggie.service.EmployeeService;
@@ -8,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,5 +70,73 @@ public class EmployeeController {
     public R<String> logout(HttpServletRequest request){
         request.removeAttribute("employee");
         return R.success("登录成功");
+    }
+
+    /***
+     * @Description:保存方法
+     * @Author:Heaiai
+     * @Create:2023/3/5 21:02
+     */
+    @PostMapping
+    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+        //赋值默认密码123456
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+//        //赋值创建时间
+//        employee.setCreateTime(LocalDateTime.now());
+//        //赋值更新时间
+//        employee.setUpdateTime(LocalDateTime.now());
+//        //获取当前登陆人
+//        Long userId = (Long)request.getSession().getAttribute("employee");
+//        //赋值创建人
+//        employee.setCreateUser(userId);
+//        //赋值更新人
+//        employee.setUpdateUser(userId);
+        //保存方法
+        employeeService.save(employee);
+        return R.success();
+    }
+
+    @GetMapping("/page")
+    public R<Page> page(int pageSize,int page,String name){
+        //构造分页构造器
+        Page pageInfo = new Page(page,pageSize);
+        //构造条件构造器
+        LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper<>();
+        //添加过滤条件
+        queryWrapper.like(StringUtils.isNotBlank(name),Employee::getName,name);
+        //添加排序条件
+        queryWrapper.orderByDesc(Employee::getUpdateTime);
+        //执行查询
+        employeeService.page(pageInfo,queryWrapper);
+        return R.success(pageInfo);
+    }
+
+    /***
+     * @Description:根据id袖管员工信息
+     * @Author:Heaiai
+     * @Create:2023/3/5 22:21
+     */
+    @PutMapping
+    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+        //会被系统自动填充
+//        Long userId = (Long) request.getSession().getAttribute("employee");
+//        employee.setUpdateUser(userId);
+//        employee.setUpdateTime(LocalDateTime.now());
+        employeeService.updateById(employee);
+        return R.success("员工信息修改成功");
+    }
+    /***
+     * @Description:根据id查询员工信息
+     * @Author:Heaiai
+     * @Create:2023/3/5 22:32
+     */
+    @GetMapping("/{id}")
+    public R<Employee> queryById(@PathVariable Long id){
+        log.info("根据id查询员工信息{}",id);
+        Employee employee = employeeService.getById(id);
+        if(null != employee){
+            return R.success(employee);
+        }
+        return R.error("没有查询到对应的员工");
     }
 }

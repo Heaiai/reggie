@@ -81,6 +81,11 @@
             <version>3.4.5</version>
         </dependency>
         <!--数据库文档核心依赖 里面还需要mysql-connector，因为上面 已经引用了所以这里就不需要了-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>3.5.2</version>
+        </dependency>
     </dependencies>
 
     <build>
