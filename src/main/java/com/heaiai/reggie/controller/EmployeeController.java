@@ -81,16 +81,6 @@ public class EmployeeController {
     public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
         //赋值默认密码123456
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-//        //赋值创建时间
-//        employee.setCreateTime(LocalDateTime.now());
-//        //赋值更新时间
-//        employee.setUpdateTime(LocalDateTime.now());
-//        //获取当前登陆人
-//        Long userId = (Long)request.getSession().getAttribute("employee");
-//        //赋值创建人
-//        employee.setCreateUser(userId);
-//        //赋值更新人
-//        employee.setUpdateUser(userId);
         //保存方法
         employeeService.save(employee);
         return R.success();
@@ -118,10 +108,6 @@ public class EmployeeController {
      */
     @PutMapping
     public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
-        //会被系统自动填充
-//        Long userId = (Long) request.getSession().getAttribute("employee");
-//        employee.setUpdateUser(userId);
-//        employee.setUpdateTime(LocalDateTime.now());
         employeeService.updateById(employee);
         return R.success("员工信息修改成功");
     }

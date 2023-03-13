@@ -1,6 +1,7 @@
 package com.heaiai.reggie.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heaiai.reggie.common.BaseContext;
 import com.heaiai.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -42,6 +43,9 @@ public class LoginCheckFilter implements Filter {
         }
         //4、判断登录状态，如果已登录，则直接放行
         if(null != request.getSession().getAttribute("employee")){
+            //给当前线程的threadLocal赋值登录人的id
+            Long id = (long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(id);
             filterChain.doFilter(request,response);
             return;
         }
