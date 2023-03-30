@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
         }
         return R.error("遇到未知错误");
     }
+
+    @ExceptionHandler(CustomeException.class)
+    public R<String> exceptionHandler(CustomeException ex){
+        log.info(ex.getMessage());
+        return R.error(ex.getMessage());
+    }
 }

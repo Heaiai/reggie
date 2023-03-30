@@ -1,4 +1,4 @@
-package com.heaiai.reggie.dao;
+package com.heaiai.reggie.mapper;
 
 import com.heaiai.reggie.entity.AddressBook;
 
