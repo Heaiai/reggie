@@ -29,10 +29,14 @@ public class GlobalExceptionHandler {
         }
         return R.error("遇到未知错误");
     }
-
+    /***
+     * @Description:捕获正常的业务异常信息
+     * @Author:Heaiai
+     * @Create:2023/8/31 21:32
+     */
     @ExceptionHandler(CustomeException.class)
     public R<String> exceptionHandler(CustomeException ex){
-        log.info(ex.getMessage());
+        log.info("捕获到的业务异常信息为:{}",ex.getMessage());
         return R.error(ex.getMessage());
     }
 }

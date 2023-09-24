@@ -9,5 +9,11 @@ import com.heaiai.reggie.entity.Category;
  * @create: 2023-03-30 22:53:20
  */
 public interface CategoryService extends IService<Category> {
+    /***
+     * @Description:删除分类方法
+     * @Author:Heaiai
+     * @Create:2023/8/31 21:26
+     */
+    void remove(Long id);
 
 }

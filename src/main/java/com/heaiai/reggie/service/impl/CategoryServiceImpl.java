@@ -27,22 +27,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Autowired
     private SetmealService setmealService;
     @Override
-    public boolean removeById(Serializable id) {
+    public void remove(Long id) {
         //根据分类Id查询是否有关联菜品
         LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        //添加查询条件，根据分类id进行查询
         lambdaQueryWrapper.eq(Dish::getCategoryId,id);
         long count1 =  dishService.count(lambdaQueryWrapper);
-        if(count1 > 1){
+        if(count1 > 0){
             throw new CustomeException("当前分类已关联菜品，不能删除");
         }
         //根据分类id查询是否有关联套餐
         LambdaQueryWrapper<Setmeal> mealLambdaQueryWrapper = new LambdaQueryWrapper<>();
         mealLambdaQueryWrapper.eq(Setmeal::getCategoryId,id);
         long count2 = setmealService.count(mealLambdaQueryWrapper);
-        if(count2 > 1){
+        if(count2 > 0){
             throw  new CustomeException("当前分类已关联套餐，不能删除");
         }
         super.removeById(id);
-        return true;
     }
 }

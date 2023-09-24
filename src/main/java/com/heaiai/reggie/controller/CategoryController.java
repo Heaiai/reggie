@@ -50,8 +50,13 @@ public class CategoryController {
      * @Create:2023/3/31 0:25
      */
     @DeleteMapping
-    public R<String> delete(Long ids){
-        categoryService.removeById(ids);
+    public R<String> delete(Long id){
+        if(null == id){
+            return R.error("当前删除菜品id为空");
+        }
+        log.info("删除分类,id为:{}",id);
+        categoryService.remove(id);
+//        categoryService.removeById(id);
         return R.success("删除成功");
     }
     /***
